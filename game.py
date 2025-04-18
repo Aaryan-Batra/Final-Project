@@ -57,5 +57,31 @@ if __name__ == "__main__":
     select_options()
 
 # Adithya Menon
+def distribute_experience(total_xp, damage_dict):
+    """
+    Distributes experience points based on damage dealt by each team member.
+
+    Parameters:
+    total_xp (int): Total experience points gained after battle.
+    damage_dict (dict): {member_name: damage_dealt}
+
+    Returns:
+    dict: {member_name: xp_awarded}
+    """
+    total_damage = sum(damage_dict.values())
+
+    if total_damage == 0:
+        # If no damage was dealt, evenly distribute XP
+        equal_share = total_xp // len(damage_dict)
+        return {member: equal_share for member in damage_dict}
+
+    xp_distribution = {}
+    for member, damage in damage_dict.items():
+        contribution_ratio = damage / total_damage
+        xp = round(contribution_ratio * total_xp)
+        xp_distribution[member] = xp
+
+    return xp_distribution
+
 # Mehret Berihun
 # Joshua Koroma
