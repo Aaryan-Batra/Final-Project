@@ -84,4 +84,59 @@ def distribute_experience(total_xp, damage_dict):
     return xp_distribution
 
 # Mehret Berihun
+
+import random
+
+def run_game(team, enemy_health=100, team_health=100):
+    """
+    Simulates a battle between the player's team and an enemy.
+
+    Parameters:
+    team (list): List of monster names.
+    enemy_health (int): Starting health of the enemy.
+    team_health (int): Collective health of the team.
+
+    Returns:
+    None
+    """
+    print("\n--- Battle Start! ---")
+    damage_tracker = {monster: 0 for monster in team}
+
+    round_number = 1
+    while enemy_health > 0 and team_health > 0:
+        print(f"\n--- Round {round_number} ---")
+        for monster in team:
+            if enemy_health <= 0:
+                break
+            # Simulate damage (can be replaced with type-based calc later)
+            damage = random.randint(5, 20)
+            print(f"{monster} attacks the enemy for {damage} damage!")
+            enemy_health -= damage
+            damage_tracker[monster] += damage
+
+            # Optional: Simulate enemy hitting back
+            retaliation = random.randint(3, 10)
+            print(f"Enemy hits back for {retaliation} damage!")
+            team_health -= retaliation
+
+            print(f"Enemy Health: {max(enemy_health, 0)}")
+            print(f"Team Health: {max(team_health, 0)}")
+
+            if team_health <= 0:
+                break
+        
+        round_number += 1
+
+    # Outcome
+    if enemy_health <= 0:
+        print("\nYou won the battle!")
+        total_xp = 100  # Arbitrary XP value for a win
+        xp_distribution = distribute_experience(total_xp, damage_tracker)
+        print("XP Distribution:")
+        for monster, xp in xp_distribution.items():
+            print(f"{monster}: {xp} XP")
+    else:
+        print("\nYou lost the battle!")
+
+
 # Joshua Koroma
