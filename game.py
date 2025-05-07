@@ -1,6 +1,10 @@
 # Enter the code here
 
 # Joshua Koroma
+class attack_value:
+    def __init__(self, attack_value):
+        self.attack_value = attack_value
+
 def type_interactions():
 # The goal of this function is to define the five types used in this game, as 
 # well as how one type attacking another would lead either to 
