@@ -1,4 +1,50 @@
 # Enter the code here
+
+# Joshua Koroma
+def type_interactions():
+# The goal of this function is to define the five types used in this game, as 
+# well as how one type attacking another would lead either to 
+# neutral, more, or less damage being dealt. Every fighter must be assigned a type.
+
+    type_interactions = ""
+
+    # These are the five types, with each fighter needing one to be assigned to them
+    attacker_types = ["Purple", "Green", "Blue", "Red", "Yellow"]
+
+    # The five types a victim could be.
+
+    victim_types = ["Purple", "Green", "Blue", "Red", "Yellow"]
+
+    # The basic type of interaction that happens in the game. At times, the enemy will be the victim and the player will be the attacker, and vice versa
+
+    interactions = {attacker_types:victim_types}
+
+    # This is a list of dictionaries about what counts as a Super effective interaction, using the attacker's type as a key and the victim's type as a value
+    super_effective = [ {"Purple":"Green"},
+                         {"Green":"Blue"},
+                         {"Blue":"Red"},
+                         {"Red":"Yellow"},
+                         {"Yellow":"Purple"} ]
+    
+    # List of dictionaries about ineffective interactions, using the same attacker:victim rules as above
+    ineffective = [ {"Green": "Purple"}, 
+                   {"Purple": "Yellow"}, 
+                   {"Yellow": "Red"}, 
+                   {"Red": "Blue"},
+                   {"Blue": "Green"} ]
+    
+    # Iterates through the super_effective dictionary to find a match between attacker and 
+    for attack in super_effective:
+        if super_effective is True:
+            (attack_value * 1.3)
+
+        elif ineffective is True:
+            (attack_value * 0.7)
+
+        else:
+            (attack_value * 1)
+    return type_interactions
+
 # Aaryan Batra
 def select_options():
     # List of 10 options of fighters that the user can pick from
@@ -137,46 +183,3 @@ def run_game(team, enemy_health=100, team_health=100):
             print(f"{monster}: {xp} XP")
     else:
         print("\nYou lost the battle!")
-
-
-# Joshua Koroma
-
-def type_interactions():
-# The goal of this function is to define the five types used in this game, as well as how one type attacking another would lead either to neutral, more, or less damage being dealt. Every fighter must be assigned a type.
-
-    # These are the five types, with each fighter needing one to be assigned to them
-    attacker_types = ["Purple", "Green", "Blue", "Red", "Yellow"]
-
-    # The five types a victim could be.
-
-    victim_types = ["Purple", "Green", "Blue", "Red", "Yellow"]
-
-    # The basic type of interaction that happens in the game. At times, the enemy will be the victim and the player will be the attacker, and vice versa
-
-    interactions = {attacker_types:victim_types}
-
-    # This is a list of dictionaries about what counts as a Super effective interaction, using the attacker's type as a key and the victim's type as a value
-    super_effective = [ {"Purple":"Green"},
-                         {"Green":"Blue"},
-                         {"Blue":"Red"},
-                         {"Red":"Yellow"},
-                         {"Yellow":"Purple"} ]
-    
-    # List of dictionaries about ineffective interactions, using the same attacker:victim rules as above
-    ineffective = [ {"Green": "Purple"}, 
-                   {"Purple": "Yellow"}, 
-                   {"Yellow": "Red"}, 
-                   {"Red": "Blue"},
-                   {"Blue": "Green"} ]
-    
-    # Iterates through the super_effective dictionary to find a match between attacker and 
-    for attack in super_effective:
-        if super_effective is True:
-            (attack_value * 1.3)
-
-        elif ineffective is True:
-            (attack_value * 0.7)
-
-        else:
-            (attack_value * 1)
-    return type_interactions
