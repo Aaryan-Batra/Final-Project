@@ -115,18 +115,29 @@ if __name__ == "__main__":
 
 import random
 
-def run_game(team, enemy_health=100, team_health=100):
+def distribute_experience(total_xp, damage_tracker):
     """
-    Simulates a battle between the player's team and an enemy.
+    Distributes total XP across the fighters based on the damage they dealt.
 
     Parameters:
-    team (list): List of monster names.
-    enemy_health (int): Starting health of the enemy.
-    team_health (int): Collective health of the team.
+    total_xp (int): Total experience points to distribute.
+    damage_tracker (dict): Dictionary mapping fighter names to damage dealt.
 
     Returns:
-    None
+    dict: Mapping of fighter names to XP awarded.
     """
+    total_damage = sum(damage_tracker.values())
+    if total_damage == 0:
+        # Prevent division by zero, return 0 XP for everyone if no damage was dealt
+        return {fighter: 0 for fighter in damage_tracker}
+
+    xp_distribution = {}
+    for fighter, damage in damage_tracker.items():
+        xp_distribution[fighter] = round((damage / total_damage) * total_xp)
+    return xp_distribution
+
+def run_game(team, enemy_health=100, team_health=100):
+  
     print("\n--- Battle Start! ---")
     damage_tracker = {monster: 0 for monster in team}
 
@@ -136,7 +147,7 @@ def run_game(team, enemy_health=100, team_health=100):
         for monster in team:
             if enemy_health <= 0:
                 break
-            # Simulate damage (can be replaced with type-based calc later)
+            # Simulate damage (can be replaced with type-based calculation later)
             damage = random.randint(5, 20)
             print(f"{monster} attacks the enemy for {damage} damage!")
             enemy_health -= damage
