@@ -163,28 +163,83 @@ def run_game(team, enemy_health=100, team_health=100):
 
 
 # Adithya Menon
-def distribute_experience(total_xp, damage_dict):
-    """
-    Distributes experience points based on damage dealt by each team member.
+def level_up_fighters(fighter_xp, current_levels):
+    level_ups = {}
+    
+    # XP thresholds for each level (e.g., level 2 requires 100 XP, level 3 requires 250 XP, etc.)
+    xp_thresholds = {
+        1: 0,
+        2: 100,
+        3: 250,
+        4: 450,
+        5: 700,
+        6: 1000,
+        7: 1350,
+        8: 1750,
+        9: 2200,
+        10: 2700
+    }
+    
+    for fighter, xp in fighter_xp.items():
+        current_level = current_levels.get(fighter, 1)
+        
+        # Find the highest level the fighter qualifies for
+        new_level = current_level
+        for level, threshold in xp_thresholds.items():
+            if xp >= threshold and level > new_level:
+                new_level = level
+        
+        # Record level up if applicable
+        if new_level > current_level:
+            level_ups[fighter] = new_level
+    
+    return level_ups
 
+def calculate_stats(fighter_name, fighter_level):
+    """
+    Calculates a fighter's stats based on their level and type.
+    
     Parameters:
-    total_xp (int): Total experience points gained after battle.
-    damage_dict (dict): {member_name: damage_dealt}
-
+    fighter_name (str): Name of the fighter including type (e.g., "Fighter 1 (Green)")
+    fighter_level (int): Current level of the fighter
+    
     Returns:
-    dict: {member_name: xp_awarded}
+    dict: Dictionary containing the fighter's stats
     """
-    total_damage = sum(damage_dict.values())
-
-    if total_damage == 0:
-        # If no damage was dealt, evenly distribute XP
-        equal_share = total_xp // len(damage_dict)
-        return {member: equal_share for member in damage_dict}
-
-    xp_distribution = {}
-    for member, damage in damage_dict.items():
-        contribution_ratio = damage / total_damage
-        xp = round(contribution_ratio * total_xp)
-        xp_distribution[member] = xp
-
-    return xp_distribution
+    # Extract fighter type from name
+    fighter_type = fighter_name.split("(")[1].strip(")")
+    
+    # Base stats for level 1
+    base_stats = {
+        "health": 50,
+        "attack": 10,
+        "defense": 8,
+        "speed": 7
+    }
+    
+    # Type-specific stat modifiers
+    type_modifiers = {
+        "Purple": {"health": 1.2, "attack": 0.9, "defense": 1.1, "speed": 0.8},
+        "Green": {"health": 1.3, "attack": 0.8, "defense": 1.2, "speed": 0.7},
+        "Blue": {"health": 0.9, "attack": 1.0, "defense": 0.9, "speed": 1.2},
+        "Red": {"health": 0.8, "attack": 1.3, "defense": 0.7, "speed": 1.2},
+        "Yellow": {"health": 1.0, "attack": 1.0, "defense": 1.0, "speed": 1.0}
+    }
+    
+    # Calculate stats based on level and type
+    stats = {}
+    for stat, base_value in base_stats.items():
+        # Apply level scaling (each level adds 5% to base stats)
+        level_multiplier = 1 + (0.05 * (fighter_level - 1))
+        
+        # Apply type modifier
+        type_multiplier = type_modifiers[fighter_type][stat]
+        
+        # Calculate final stat value
+        stats[stat] = round(base_value * level_multiplier * type_multiplier)
+    
+    # Add level and type to stats dictionary
+    stats["level"] = fighter_level
+    stats["type"] = fighter_type
+    
+    return stats
