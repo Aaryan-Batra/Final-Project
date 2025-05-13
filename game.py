@@ -171,74 +171,55 @@ def run_game(team, enemy_health=100, team_health=100):
   
 import random
 
-def initialize_fighters():
-    fighters = [f"Fighter{i}" for i in range(1, 11)]
-    types = ["Red", "Blue", "Green", "Purple", "Yellow"]
-    fighter_types = {}
-    fighter_levels = {}
+fighters = ["Fighter" + str(i) for i in range(1, 11)]
+types = ["Red", "Blue", "Green", "Purple", "Yellow"]
+type_map = {}
+levels = {}
 
-    for i, fighter in enumerate(fighters):
-        fighter_types[fighter] = types[i % len(types)]
-        fighter_levels[fighter] = random.randint(1, 5)
+for i in range(len(fighters)):
+    type_map[fighters[i]] = types[i % 5]
+    levels[fighters[i]] = random.randint(1, 5)
 
-    return fighters, fighter_types, fighter_levels
+# Set base stats and bonus
+bonus_points = 10
+ratios = {}
 
-def calculate_stats(fighter_type, level):
-    base_health = 50
-    base_attack = 10
+for i, f in enumerate(fighters):
+    if i % 2 == 0:
+        ratios[f] = 0.6
+    else:
+        ratios[f] = 0.4
 
-    type_mods = {
-        "Purple": (1.2, 0.9),
-        "Green": (1.3, 0.8),
-        "Blue": (0.9, 1.0),
-        "Red": (0.8, 1.3),
-        "Yellow": (1.0, 1.0)
+# Distribute bonuses and apply level/type effect
+final_stats = {}
+
+for f in fighters:
+    health = round(bonus_points * ratios[f])
+    attack = bonus_points - health
+
+    if type_map[f] == "Red":
+        attack = attack * 1.3
+        health = health * 0.8
+    elif type_map[f] == "Blue":
+        attack = attack * 1.0
+        health = health * 0.9
+    elif type_map[f] == "Green":
+        attack = attack * 0.8
+        health = health * 1.3
+    elif type_map[f] == "Purple":
+        attack = attack * 0.9
+        health = health * 1.2
+    else:
+        attack = attack * 1.0
+        health = health * 1.0
+
+    level = levels[f]
+    level_mod = 1 + 0.05 * (level - 1)
+    final_stats[f] = {
+        "health": 50 * level_mod + health,
+        "attack": 10 * level_mod + attack
     }
 
-    h_mod, a_mod = type_mods.get(fighter_type, (1.0, 1.0))
-    level_boost = 1 + 0.05 * (level - 1)
-
-    return {
-        "health": base_health * h_mod * level_boost,
-        "attack": base_attack * a_mod * level_boost
-    }
-
-def distribute_bonus(fighters, total, health_ratio_map):
-    distributed = {}
-    for f in fighters:
-        ratio = health_ratio_map.get(f, 0.5)
-        health = round(total * ratio)
-        attack = total - health
-        distributed[f] = {"health": health, "attack": attack}
-    return distributed
-
-def apply_bonuses(points, types, levels):
-    final = {}
-    for fighter, base in points.items():
-        typ = types.get(fighter, "Yellow")
-        lvl = levels.get(fighter, 1)
-        bonus = calculate_stats(typ, lvl)
-
-        final[fighter] = {
-            "health": base["health"] + bonus["health"],
-            "attack": base["attack"] + bonus["attack"]
-        }
-    return final
-
-if __name__ == "__main__":
-    fighters, types, levels = initialize_fighters()
-    bonuses = 10
-
-    # For variety, alternate health ratios
-    ratios = {f: 0.6 if i % 2 == 0 else 0.4 for i, f in enumerate(fighters)}
-
-    print("Distributing bonus points:")
-    points = distribute_bonus(fighters, bonuses, ratios)
-    for f in fighters:
-        print(f"{f} -> Health: {points[f]['health']}, Attack: {points[f]['attack']}")
-
-    final = apply_bonuses(points, types, levels)
-    print("\nFinal stats with type/level bonuses:")
-    for f in fighters:
-        print(f"{f} -> Health: {final[f]['health']:.2f}, Attack: {final[f]['attack']:.2f}")
-
+print("Fighter Stats:")
+for f in fighters:
+print(f + ": Health = " + str(round(final_stats[f]["health"], 2)) + ", Attack = " + str(round(final_stats[f]["attack"], 2)))
