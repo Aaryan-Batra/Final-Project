@@ -52,8 +52,8 @@ def type_interactions():
 # Aaryan Batra
 def select_options():
     # List of 10 options of fighters that the user can pick from
-    options = ["Fighter 1", "Fighter 2", "Fighter 3", "Fighter 4", "Fighter 5", 
-               "Fighter 6", "Fighter 7", "Fighter 8", "Fighter 9", "Fighter 10"]
+    options = ["Fighter 1 (Green)", "Fighter 2 (Green)", "Fighter 3 (Blue)", "Fighter 4 (Blue)", "Fighter 5 (Red)", 
+               "Fighter 6 (Red)", "Fighter 7 (Purple)", "Fighter 8 (Purple)", "Fighter 9 (Yellow)", "Fighter 10 (Yellow)"]
     
     print("Select 5 options from the list:")
     for i, option in enumerate(options, 1):
