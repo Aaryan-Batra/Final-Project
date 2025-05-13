@@ -168,83 +168,87 @@ def run_game(team, enemy_health=100, team_health=100):
 
 
 # Adithya Menon
-def level_up_fighters(fighter_xp, current_levels):
-    level_ups = {}
-    
-    # XP thresholds for each level (e.g., level 2 requires 100 XP, level 3 requires 250 XP, etc.)
-    xp_thresholds = {
-        1: 0,
-        2: 100,
-        3: 250,
-        4: 450,
-        5: 700,
-        6: 1000,
-        7: 1350,
-        8: 1750,
-        9: 2200,
-        10: 2700
-    }
-    
-    for fighter, xp in fighter_xp.items():
-        current_level = current_levels.get(fighter, 1)
-        
-        # Find the highest level the fighter qualifies for
-        new_level = current_level
-        for level, threshold in xp_thresholds.items():
-            if xp >= threshold and level > new_level:
-                new_level = level
-        
-        # Record level up if applicable
-        if new_level > current_level:
-            level_ups[fighter] = new_level
-    
-    return level_ups
-
-def calculate_stats(fighter_name, fighter_level):
-    """
-    Calculates a fighter's stats based on their level and type.
-    
-    Parameters:
-    fighter_name (str): Name of the fighter including type (e.g., "Fighter 1 (Green)")
-    fighter_level (int): Current level of the fighter
-    
-    Returns:
-    dict: Dictionary containing the fighter's stats
-    """
-    # Extract fighter type from name
-    fighter_type = fighter_name.split("(")[1].strip(")")
-    
-    # Base stats for level 1
-    base_stats = {
-        "health": 50,
-        "attack": 10,
-        "defense": 8,
-        "speed": 7
-    }
-    
-    # Type-specific stat modifiers
-    type_modifiers = {
-        "Purple": {"health": 1.2, "attack": 0.9, "defense": 1.1, "speed": 0.8},
-        "Green": {"health": 1.3, "attack": 0.8, "defense": 1.2, "speed": 0.7},
-        "Blue": {"health": 0.9, "attack": 1.0, "defense": 0.9, "speed": 1.2},
-        "Red": {"health": 0.8, "attack": 1.3, "defense": 0.7, "speed": 1.2},
-        "Yellow": {"health": 1.0, "attack": 1.0, "defense": 1.0, "speed": 1.0}
-    }
-    
-    # Calculate stats based on level and type
-    stats = {}
-    for stat, base_value in base_stats.items():
-        # Apply level scaling (each level adds 5% to base stats)
-        level_multiplier = 1 + (0.05 * (fighter_level - 1))
-        
-        # Apply type modifier
-        type_multiplier = type_modifiers[fighter_type][stat]
-        
-        # Calculate final stat value
-        stats[stat] = round(base_value * level_multiplier * type_multiplier)
-    
-    # Add level and type to stats dictionary
-    stats["level"] = fighter_level
+  
+def initialize_fighters():  
+    # Create 10 fighters with predefined types and levels  
+    fighters = ["Fighter" + str(i) for i in range(1, 11)]  
+    types_list = ["Red", "Blue", "Green", "Purple", "Yellow"]  
+    fighter_types = {fighter: types_list[(i % len(types_list))] for i, fighter in enumerate(fighters)}  
+    fighter_levels = {fighter: ((i % 5) + 1) for i, fighter in enumerate(fighters)}  
+    return fighters, fighter_types, fighter_levels  
+  
+# Helper function: calculates type and level bonuses (only for health and attack)  
+def calculate_stats(fighter_type, fighter_level):  
+    # Base stats for all fighters - only health and attack  
+    base_stats = {"health": 50, "attack": 10}  
+      
+    # Type-specific stat modifiers  
+    type_modifiers = {  
+        "Purple": {"health": 1.2, "attack": 0.9},  
+        "Green":  {"health": 1.3, "attack": 0.8},  
+        "Blue":   {"health": 0.9, "attack": 1.0},  
+        "Red":    {"health": 0.8, "attack": 1.3},  
+        "Yellow": {"health": 1.0, "attack": 1.0}  
+    }  
+      
+    # Calculate bonus based on level scaling and fighter type  
+    bonus_stats = {}  
+    for stat, base in base_stats.items():  
+        level_multiplier = 1 + 0.05 * (fighter_level - 1)  
+        type_bonus = type_modifiers.get(fighter_type, {"health": 1.0, "attack": 1.0})[stat]  
+        bonus_stats[stat] = base * level_multiplier * type_bonus  
+    return bonus_stats  
+  
+def auto_distribute_points(fighters, total_points, health_ratios):    
+ 
+    distributed_points = {}  
+    for fighter in fighters:  
+        ratio = health_ratios.get(fighter, 0.5)  # default ratio if missing is 0.5  
+        # Calculate initial allocation  
+        health_points = round(total_points * ratio)  
+        attack_points = total_points - health_points  
+        # Adjust if rounding causes discrepancies (here it's already handled by subtraction)  
+        distributed_points[fighter] = {"health": health_points, "attack": attack_points}  
+    return distributed_points  
+  
+# Non-trivial function 2: Apply type and level bonuses to the distributed points.  
+def apply_stat_bonuses(distributed_points, fighter_types, fighter_levels):  
+ 
+    final_stats = {}  
+    for fighter, points in distributed_points.items():  
+        ftype = fighter_types.get(fighter, "Yellow")  
+        flevel = fighter_levels.get(fighter, 1)  
+        bonus = calculate_stats(ftype, flevel)  
+        final_stats[fighter] = {  
+            "health": points["health"] + bonus["health"],  
+            "attack": points["attack"] + bonus["attack"]  
+        }  
+    return final_stats  
+  
+  
+if __name__ == "__main__":  
+    # Initialize fighters, types, and levels from our simulated paste.txt  
+    fighters, fighter_types, fighter_levels = initialize_fighters()  
+      
+    total_bonus_points = 10  # total bonus points to distribute to each fighter  
+      
+    # Define desired health ratio for each fighter  
+    # Here, we simulate different desired ratios for demonstration:  
+    health_ratios = {fighter: 0.6 if (i % 2 == 0) else 0.4 for i, fighter in enumerate(fighters)}  
+      
+    print("Auto-distributing bonus points for 10 fighters:")  
+    distributed_points = auto_distribute_points(fighters, total_bonus_points, health_ratios)  
+    for fighter in fighters:  
+        print(fighter + " -> Health bonus: " + str(distributed_points[fighter]['health']) +  
+              ", Attack bonus: " + str(distributed_points[fighter]['attack']))  
+      
+    # Combine the distributed points with type/level bonuses  
+    final_stats = apply_stat_bonuses(distributed_points, fighter_types, fighter_levels)  
+      
+    print("\nFinal stats after applying type and level bonuses:")  
+    for fighter in fighters:  
+        print(fighter + " -> Health: " + str(final_stats[fighter]['health']) +  
+              ", Attack: " + str(final_stats[fighter]['attack']))  
     stats["type"] = fighter_type
     
     return stats
