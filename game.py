@@ -223,3 +223,4 @@ for f in fighters:
 print("Fighter Stats:")
 for f in fighters:
     print(f + ": Health = " + str(round(final_stats[f]["health"], 2)) + ", Attack = " + str(round(final_stats[f]["attack"], 2)))
+
