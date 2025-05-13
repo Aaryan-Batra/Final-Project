@@ -50,7 +50,7 @@ def type_interactions():
     return type_interactions
 
 # Aaryan Batra
-def get_fighter_options():
+def fighter_options():
     options = ["Fighter 1 (Green)", "Fighter 2 (Green)", "Fighter 3 (Blue)", "Fighter 4 (Blue)", "Fighter 5 (Red)", 
                "Fighter 6 (Red)", "Fighter 7 (Purple)", "Fighter 8 (Purple)", "Fighter 9 (Yellow)", "Fighter 10 (Yellow)"]
     
@@ -65,7 +65,7 @@ def select_options():
     """
     User input and validation for selecting 5 fighters.
     """
-    options = get_fighter_options()
+    options = fighter_options()
     selected = []
     selection = False
     
