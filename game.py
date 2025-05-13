@@ -63,19 +63,19 @@ def fighter_options():
 
 def select_options():
     """
-    User input and validation for selecting 5 fighters.
+    User input and validation for selecting 5 fighters
     """
     options = fighter_options()
     selected = []
     selection = False
     
     while not selection:
-        print("\nEnter 5 numbers between 1-10, separated by spaces:")
+        print("\n Enter 5 numbers between 1-10, and make sure to put a space between each:")
         user_input = input("> ")
         choices = user_input.split()        
 
         if len(choices) != 5:
-            print(f"Please select exactly 5 options. You entered {len(choices)}.")
+            print(f" Please select exactly 5 options. You chose {len(choices)}.")
             continue
         
         valid_numbers = True
@@ -87,7 +87,7 @@ def select_options():
             numbers.append(int(choice))
         
         if not valid_numbers:
-            print("Please enter only numbers.")
+            print("Please enter ONLY numbers.")
             continue     
 
         if any(num < 1 or num > 10 for num in numbers):
