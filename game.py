@@ -54,28 +54,27 @@ def fighter_options():
     options = ["Fighter 1 (Green)", "Fighter 2 (Green)", "Fighter 3 (Blue)", "Fighter 4 (Blue)", "Fighter 5 (Red)", 
                "Fighter 6 (Red)", "Fighter 7 (Purple)", "Fighter 8 (Purple)", "Fighter 9 (Yellow)", "Fighter 10 (Yellow)"]
     
-    print("Select 5 options from the list:")
+    print("\nPick any 5 fighters:")
     for i, option in enumerate(options, 1):
         print(f"{i}. {option}")
     
     return options
 
-
 def select_options():
     """
-    User input and validation for selecting 5 fighters
+    The user gets to pick their team
     """
     options = fighter_options()
     selected = []
     selection = False
     
     while not selection:
-        print("\n Enter 5 numbers between 1-10, and make sure to put a space between each:")
+        print("\n Type 5 numbers between 1-10 and make sure to include a space between each (like '1 3 5 7 9'):")
         user_input = input("> ")
-        choices = user_input.split()        
-
+        choices = user_input.split()
+        
         if len(choices) != 5:
-            print(f" Please select exactly 5 options. You chose {len(choices)}.")
+            print(f"You need to pick ONLY 5 fighters!")
             continue
         
         valid_numbers = True
@@ -87,29 +86,30 @@ def select_options():
             numbers.append(int(choice))
         
         if not valid_numbers:
-            print("Please enter ONLY numbers.")
-            continue     
-
+            print("Try again.")
+            continue
+        
         if any(num < 1 or num > 10 for num in numbers):
-            print("All numbers must be between 1 and 10.")
+            print("Make sure the numbers you ONLY pick numbers between 1 and 10")
             continue
         
         if len(set(numbers)) != 5:
-            print("Please select 5 different options (no duplicates).")
+            print("You can't select the same number twice! Try Again!")
             continue
         
         selected = [options[num-1] for num in numbers]
         selection = True
-
-    print("\nYour selections:")
+    
+    print("\nGreat Selections:")
     for option in selected:
         print(f"- {option}")
     
     return selected
 
-
 if __name__ == "__main__":
+    print("Time to build your fighter squad!")
     select_options()
+    print("You are now ready for battle!! Good Luck!")
 
 # Mehret Berihun
 
