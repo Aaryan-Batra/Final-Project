@@ -196,12 +196,19 @@ def type_interactions():
 
 if __name__ == "__main__":
     print("Time to build your fighter squad!")
-    select_options()
+    selected_display_names = select_options()
     print("You are now ready for battle!! Good Luck!")
 
+    # Initialize all 10 fighters
     fighters, type_map, levels, ratios = initialize_fighters()
     final_stats = calculate_final_stats(fighters, type_map, levels, ratios)
 
-    print("Fighter Stats:")
+    # Print stats for all fighters
+    print("\nFighter Stats:")
     for f in fighters:
         print(f + ": Health = " + str(round(final_stats[f]["health"], 2)) + ", Attack = " + str(round(final_stats[f]["attack"], 2)))
+
+    selected_team = [f"Fighter{display.split()[1]}" for display in selected_display_names]
+
+    # Run the battle with the selected team
+    run_game(selected_team)
