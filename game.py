@@ -168,10 +168,7 @@ class attack_value:
         self.attack_value = attack_value
 
 def type_interactions():
-    # The goal of this function is to define the five types used in this game, as 
-    # well as how one type attacking another would lead either to 
-    # neutral, more, or less damage being dealt. Every fighter must be assigned a type.
-
+   
     type_interactions = ""
 
     # These are the five types, with each fighter needing one to be assigned to them
